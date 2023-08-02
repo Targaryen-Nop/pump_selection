@@ -1,0 +1,369 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+  </head>
+  <style>
+    body {
+      overflow-x: hidden;
+      zoom: 100%;
+      padding-bottom: 10px;
+    }
+
+    .offcanvas-body {
+      color: #fff;
+    }
+
+    .navbar {
+      background-color: #0c2d5c;
+      width: 100%;
+      height: 60px;
+    }
+
+    @media only screen and (max-width: 900px) {
+      .navbar {
+        background-color: #0c2d5c;
+        width: 100%;
+        height: 60px;
+      }
+
+      .offcanvas-header {
+        background-color: #cb3d26;
+        color: #fff;
+      }
+
+      .offcanvas-body {
+        background-color: #0c2d5c;
+      }
+
+      #kmonitoring {
+        display: none;
+      }
+    }
+
+    .img-logo {
+      width: 60px;
+      height: 45px;
+      background-color: white;
+    }
+
+    .moniotring h1 a {
+      color: white;
+    }
+
+    .image {
+      width: 45px;
+      height: 45px;
+      float: left;
+      overflow: hidden;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+    }
+
+    .image {
+      -webkit-border-radius: 100%;
+      -moz-border-radius: 100%;
+      border-radius: 100%;
+    }
+
+    .info-number .badge {
+      font-size: 12px;
+      font-weight: normal;
+      line-height: 13px;
+      padding: 2px 6px;
+      position: relative;
+      right: 4px;
+      top: -8px;
+    }
+
+    
+  </style>
+  <body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark">
+      <a class="navbar-brand"
+        ><img src="{% static 'images/login.png' %}" class="img-logo"
+      /></a>
+      <a style="font-size: 40px" class="navbar-brand" id="kmonitoring"
+        >KOP Pump Performance Curves</a
+      >
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasNavbar"
+        aria-controls="offcanvasNavbar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
+    <div class="container-fluid">
+      <div class="row mt-5 p-5">
+        <div class="col-3">
+          <form method="POST" id="myForm" onsubmit="window.location.reload()">
+            {% csrf_token %}
+            <label for="model">Choose a Model:</label>
+            <select
+              class="form-select"
+              name="model"
+              id="model"
+              class=" mb-3"
+            >
+              <option value="kdin">KDIN</option>
+              <option value="kiso">KISO</option>
+              <option value="kop9196">KOP9196</option>
+              <option value="max3">MAX3</option>
+            </select>
+            <br />
+            <label for="flow">Flow:</label>
+            <input
+              type="number"
+              step="any"
+              name="fflow"
+              id="flow"
+              class="form-control"
+              required
+              value="{{fflow}}"
+            />
+            <br />
+            <label for="head">Head:</label>
+            <input
+              type="number"
+              step="any"
+              name="hhead"
+              class="form-control"
+              id="head"
+              required
+              value="{{hhead}}"
+            />
+            <br />
+            <div class="d-grid gap-2 my-3">
+              <button class="btn btn-success" type="submit">Search</button>
+              <button class="btn btn-danger" type="button" onclick="resetForm()">Reset</button>
+            </div>
+
+     
+          </form>
+        </div>
+        <div class="col-9">
+          
+          <div id="graph">
+            {% if chart %} {% if chart.0 %}
+            <img
+              src="data:image/png;base64,{{ chart.0 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+              ,height="1000 "
+            />
+            <br /><br /><br />
+            {% endif %} {% if chart.1 %}
+            <img
+              src="data:image/png;base64,{{ chart.1 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.2 %}
+            <img
+              src="data:image/png;base64,{{ chart.2 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.3 %}
+            <img
+              src="data:image/png;base64,{{ chart.3 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.4 %}
+            <img
+              src="data:image/png;base64,{{ chart.4 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.5 %}
+            <img
+              src="data:image/png;base64,{{ chart.5 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.6 %}
+            <img
+              src="data:image/png;base64,{{ chart.6 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.7 %}
+            <img
+              src="data:image/png;base64,{{ chart.7 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.8 %}
+            <img
+              src="data:image/png;base64,{{ chart.8 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.9 %}
+            <img
+              src="data:image/png;base64,{{ chart.9 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.10 %}
+            <img
+              src="data:image/png;base64,{{ chart.10 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.11 %}
+            <img
+              src="data:image/png;base64,{{ chart.11 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.12 %}
+            <img
+              src="data:image/png;base64,{{ chart.12 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% if chart.13 %}
+            <img
+              src="data:image/png;base64,{{ chart.13 }}"
+              id="chart-img"
+              class="graph-img"
+              width="700"
+            />
+            <br />
+            {% endif %} {% else %} Not Found Chart {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+  <script>
+    function resetForm() {
+      document.getElementById("myForm").reset(); // เคลียร์ค่าฟอร์ม
+      document.getElementById("graph").innerHTML = ""; // ลบกราฟ
+    }
+  </script>
+  <script>
+    (function ($) {
+      /* -------------------------------------------------------- */
+      /*	//set Global variables
+	/* -------------------------------------------------------- */
+      var cards = $(".card-drop"),
+        toggler = cards.find(".toggle"),
+        links = cards.find("ul>li>a"),
+        li = links.parent("li"),
+        count = links.length,
+        width = links.outerWidth();
+
+      //set z-Index of drop Items
+      links.parent("li").each(function (i) {
+        $(this).css("z-index", count - i); //invert the index values
+      });
+
+      //set top margins & widths of li elements
+      function setClosed() {
+        li.each(function (index) {
+          $(this)
+            .css("top", index * 2)
+            .css("width", width - index * 2)
+            .css("margin-left", (index * 2) / 2);
+        });
+        li.addClass("closed");
+        toggler.removeClass("active");
+      }
+      setClosed();
+
+      /* -------------------------------------------------------- */
+      /*	Toggler Click handler
+	/* -------------------------------------------------------- */
+      toggler.on("mousedown", function () {
+        var $this = $(this); //cache $(this)
+        //if the menu is active:
+        if ($this.is(".active")) {
+          setClosed();
+        } else {
+          //if the menu is un-active:
+          $this.addClass("active");
+          li.removeClass("closed");
+          //set top margins
+          li.each(function (index) {
+            $(this)
+              .css("top", 60 * (index + 1))
+              .css("width", "100%")
+              .css("margin-left", "0px");
+          });
+        }
+      });
+
+      /* -------------------------------------------------------- */
+      /*	Links Click handler
+	/* -------------------------------------------------------- */
+      links.on("click", function (e) {
+        var $this = $(this),
+          label = $this.data("label");
+        icon = $this.children("i").attr("class");
+
+        li.removeClass("active");
+        if ($this.parent("li").is("active")) {
+          $this.parent("li").removeClass("active");
+        } else {
+          $this.parent("li").addClass("active");
+        }
+        toggler.children("span").text(label);
+        toggler.children("i").removeClass().addClass(icon);
+        setClosed();
+        e.preventDefault;
+      });
+    })(jQuery);
+  </script>
+</html>

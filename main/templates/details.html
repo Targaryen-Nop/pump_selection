@@ -1,0 +1,53 @@
+{% extends 'main.html' %}
+
+{% block body %}
+
+<!-- HTML Template: details.html -->
+<form action="{% url 'read_table' %}">
+  <button type="submit" class="btn btn-danger">Back</button>
+</form>
+
+<table class="table table-striped" >
+  <thead>
+    <tr >
+    <th>No.</th>
+      <th>Fac Number</th>
+      <th>Model</th>
+      <th>Data_type</th>
+      <th>RPM</th>
+      <th>Imp</th>
+      <th>Flow</th>
+      <th>Head</th>
+      <th>Eff</th>
+      <th>Npshr</th>
+      <th>KW</th>
+      <th>Format</th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+    {% for index, row in factory.iterrows %}
+    <tr>
+        <td>{{ forloop.counter}}</td>
+        <td>{{ row.fac_number }}</td>
+        <td>{{ row.model_short }}</td>
+        <td>{{ row.data_type }}</td>
+        <td>{{ row.rpm }}</td>
+        <td>{{ row.imp_dia }}</td>
+        <td>{{ row.flow }}</td>
+        <td>{{ row.head }}</td>
+        <td>{% if row.eff %}{{ row.eff }}{% else %}{{ '' }}{% endif %}</td>
+        <td>{{ row.npshr }}</td>
+        <td>{{ row.kw }}</td>
+        <td>{{ row.model }}</td>
+
+    </tr>
+    {% endfor %}
+
+
+
+
+
+
+{% endblock %}

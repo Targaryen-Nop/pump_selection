@@ -1,0 +1,92 @@
+<form method="POST" id="myForm" onsubmit="window.location.reload()">
+    {% csrf_token %}
+    <label for="model">Choose a Model:</label>
+    <select name="model" id="model" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+      <option value="kdin">KDIN</option>
+      <option value="kiso">KISO</option>
+      <option value="kop9196">KOP9196</option>
+      <option value="max3">MAX3</option>
+    </select>
+    <br>
+    <label for="flow">Flow:</label>
+    <input type="number" step="any" class="form-control" name="fflow" id="flow" required value="{{fflow}}">
+    <br>
+    <label for="head">Head:</label>
+    <input type="number" step="any" class="form-control" name="hhead" id="head" required value="{{hhead}}">
+    <br>
+    <button type="submit" class="btn btn-success">Submit</button>
+    <button type="button" class="btn btn-danger" onclick="resetForm()">Reset</button>
+  </form>
+  <div id="graph">
+      {% if chart %}
+      {% if chart.0 %}
+      <img src="data:image/png;base64,{{ chart.0 }}" id="chart-img" class="graph-img" width="700" ,height="1000 ">
+      <br><br><br>
+      {% endif %}
+      {% if chart.1 %}
+      <img src="data:image/png;base64,{{ chart.1 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.2 %}
+      <img src="data:image/png;base64,{{ chart.2 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.3 %}
+      <img src="data:image/png;base64,{{ chart.3 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.4 %}
+      <img src="data:image/png;base64,{{ chart.4 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.5 %}
+      <img src="data:image/png;base64,{{ chart.5 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.6 %}
+      <img src="data:image/png;base64,{{ chart.6 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.7 %}
+      <img src="data:image/png;base64,{{ chart.7 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.8 %}
+      <img src="data:image/png;base64,{{ chart.8 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.9 %}
+      <img src="data:image/png;base64,{{ chart.9 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.10 %}
+      <img src="data:image/png;base64,{{ chart.10 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.11 %}
+      <img src="data:image/png;base64,{{ chart.11 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.12 %}
+      <img src="data:image/png;base64,{{ chart.12 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% if chart.13 %}
+      <img src="data:image/png;base64,{{ chart.13 }}" id="chart-img" class="graph-img" width="700">
+      <br>
+      {% endif %}
+      {% else %}
+      Not Found Chart
+      {% endif %}
+  </div>
+<script>
+    function goBack() {
+      window.history.back();
+  }
+</script>
+<script>
+    function resetForm() {
+      document.getElementById("myForm").reset(); // เคลียร์ค่าฟอร์ม
+      document.getElementById("graph").innerHTML = ""; // ลบกราฟ
+    }
+</script>

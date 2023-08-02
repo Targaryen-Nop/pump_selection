@@ -1,0 +1,111 @@
+{% extends 'main.html' %} {% block body %}
+<form action="{% url 'my_form_view' %}">
+  <button type="submit" class="btn btn-primary" formnovalidate>Back</button>
+</form>
+
+<form id="search-form">
+  <input type="text" id="search-input" placeholder="ค้นหา..." />
+  <button type="submit">ค้นหา</button>
+</form>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th id="fac-number-header">Fac Number</th>
+      <th>Equipment</th>
+      <th>Brand</th>
+      <th>Model Short</th>
+      <th>Model</th>
+      <th>RPM</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for index, row in data_table.iterrows %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td><a href="/details/{{ row.fac_number }}">{{ row.fac_number }}</a></td>
+      <td>{{ row.equipment }}</td>
+      <td>{{ row.brand }}</td>
+      <td>{{ row.model_short }}</td>
+      <td>{{ row.model }}</td>
+      <td>{{ row.rpm }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script>
+  var sortOrder = "desc"; // กำหนดค่าเริ่มต้นเป็นการเรียงจากมากไปน้อย
+
+  document
+    .getElementById("fac-number-header")
+    .addEventListener("click", function () {
+      sortTableByFacNumber();
+      sortOrder = sortOrder === "asc" ? "desc" : "asc"; // เปลี่ยนการเรียงลำดับเมื่อกดอีกครั้ง
+    });
+
+  function sortTableByFacNumber() {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.querySelector(".table");
+    switching = true;
+    while (switching) {
+      switching = false;
+      rows = table.getElementsByTagName("tr");
+      for (i = 1; i < rows.length - 1; i++) {
+        shouldSwitch = false;
+        x = parseInt(rows[i].getElementsByTagName("td")[0].innerHTML); // อ้างอิงตำแหน่งของคอลัมน์ fac_number
+        y = parseInt(rows[i + 1].getElementsByTagName("td")[0].innerHTML); // อ้างอิงตำแหน่งของคอลัมน์ fac_number ของแถวถัดไป
+
+        if (sortOrder === "asc") {
+          // เรียงจากน้อยไปมาก
+          if (x > y) {
+            shouldSwitch = true;
+            break;
+          }
+        } else {
+          // เรียงจากมากไปน้อย (ค่าเริ่มต้น)
+          if (x < y) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+      }
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
+  }
+
+  document
+    .getElementById("search-form")
+    .addEventListener("submit", function (event) {
+      event.preventDefault(); // ป้องกันการส่งค่าแบบฟอร์มแบบเริ่มต้น
+
+      // ดึงค่าที่ผู้ใช้ป้อนในฟิลด์ค้นหา
+      var searchQuery = document.getElementById("search-input").value.trim();
+
+      // ทำการค้นหาหรือดำเนินการอื่นตามต้องการ
+      // เช่น เรียกฟังก์ชันเพื่อดำเนินการค้นหาข้อมูล
+      performSearch(searchQuery);
+    });
+
+  function performSearch(query) {
+    // ทำการค้นหาหรือดำเนินการตามต้องการ
+    // เช่น ส่งคำขอค้นหาไปยังเซิร์ฟเวอร์
+    fetch("/search?q=" + encodeURIComponent(query))
+      .then((response) => response.text())
+      .then((html) => {
+        // อัปเดตตารางหรือแสดงผลข้อมูลที่ได้รับจากการค้นหา
+        updateTable(html);
+      });
+  }
+
+  function updateTable(html) {
+    // อัปเดตตารางหรือแสดงผลข้อมูลที่ได้รับจากการค้นหา
+    var table = document.querySelector(".table");
+    table.innerHTML = html;
+  }
+</script>
+{% endblock %}
